@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantromon"
+version = "0.1.0"
+description = "QuantroTa layout and lumped-C extraction (Palace / Ansys Q3D)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "ezdxf",
+    "shapely",
+    "quantum-metal",
+]
+
+[project.optional-dependencies]
+ansys = [
+    "quantum-metal[ansys]",
+]
+# SQDMetal is not on PyPI. After this extra, still:
+#   pip install -e /path/to/SQDMetal
+palace = []
+dev = [
+    "ipykernel",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+quantromon = ["data/model_/*.dxf"]

@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+src/*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Palace / Gmsh (large, machine-local)
+sims/
+*.msh
+outputFiles/
+
+# Generated figures and GDS; keep out/*.csv
+out/*.png
+out/*.gds
+out/*.txt
+
+# Machine-local Palace wrapper
+temp.sh
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
