@@ -38,7 +38,7 @@ Paper (cousin device): \(C_J\) fit 56.88 fF / HFSS 50.23 fF; \(C_R\) fit 781.8 f
 - 2 um size field on the whole Al meander box: 3 GB mesh
 - 0.15 um size field on the 0.20 um JJ gap: mesher ~13 GB, killed, no C
 
-**Phase 3 scaffold.** Ansys Q3D validator for the same C-matrix (Metal tutorial 4.01, renderer `q3d`). Not HFSS eigenmode. Dry-run works on this Ubuntu box. `--run` needs Windows + AEDT and has not been executed.
+**Phase 3.** Ansys Q3D on the lab HP Z2 (AEDT 2025.2, conda `chip`). First `--run --case al_meander` solved but left Metal `ground_main_plane` Unassigned, so \(C_R\) was 324 fF vs Palace 600 fF. Ground COM delete is on `main` (`17b97bd`). Lab handoff: `lab_windows.md`.
 
 ## What the numbers mean
 
@@ -54,17 +54,16 @@ C_{J,\mathrm{qubit}} = C_{J,\mathrm{Palace/Q3D}} + C_{J,\mathrm{overlap}}
 
 ## Further steps (in order)
 
-### 1. Q3D on the Windows Ansys box
+### 1. Q3D on the Windows Ansys box (in progress)
 
-Copy or git-pull this package. Windows, Electronics Desktop, `chip` env with `pip install -e ".[ansys]"`.
+Clone is `D:\Hari\quantromon`. Commands and git/SSL notes: `lab_windows.md`.
 
 ```text
+git pull
 python -m quantromon.sim.q3d --run --case al_meander
 ```
 
-Same-LAN SSH is fine for files and a shell if OpenSSH Server is on. COM/Q3D often wants a logged-in desktop; if `--run` fails over SSH, use Remote Desktop and run it there.
-
-Gate: 3x3 matrix, nets P1 P2 P3, no extra ground net. Compare to Palace 32.74 / 32.54 / 600.27 fF. Do not expect bit equality (different mesh and 160 nm thin conductors). Optional: `--case pads`.
+Gate: log shows `deleted ['ground_main_plane']`, 3x3 matrix, nets P1 P2 P3, no `ground_*` in Ansys. Compare to Palace 32.74 / 32.54 / 600.27 fF. First run with the leftover ground sheet is not that comparison.
 
 Details: `phase3.md`. Notebook: `notebooks/phase3_q3d.ipynb`.
 
@@ -121,4 +120,5 @@ python -m quantromon.sim.q3d          # dry-run Q3D table
 | `notebooks/phase3_q3d.ipynb` | look at Palace vs Q3D table |
 | `out/phase2_C_fF_al_meander.csv` | current Palace C |
 | `out/phase3_palace_reference.csv` | run history |
-| `out/phase3_q3d_vs_palace.csv` | comparison (Q3D empty until `--run`) |
+| `out/phase3_q3d_vs_palace.csv` | comparison (first Q3D run still had ground sheet) |
+| `devnotes/lab_windows.md` | Ansys PC chat handoff |
