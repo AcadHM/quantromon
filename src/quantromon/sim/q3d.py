@@ -120,14 +120,37 @@ def _allow_pandas_delim_whitespace() -> None:
     pd.read_csv = read_csv
 
 
+def _ansys_object_names(q3d) -> list[str]:
+    if q3d.pinfo is None:
+        return []
+    return list(q3d.pinfo.get_all_object_names())
+
+
 def _delete_ground_if_present(q3d) -> None:
-    """Metal always draws ground_main_plane. Palace has no on-chip ground."""
-    for name in ("ground_main_plane", "ground_main_plane1"):
-        try:
-            q3d.modeler.delete(name)
-            print("deleted", name)
-        except Exception:
-            pass
+    """Remove Metal's chip ground sheet. Palace has no on-chip ground.
+
+    HfssModeler has no ``.delete``. Swallowing that AttributeError left
+    ``ground_main_plane`` in Q3D Unassigned, which Ansys treats as grounded
+    and screens ``C_R``.
+    """
+    before = _ansys_object_names(q3d)
+    print("ansys objects before ground delete:", before)
+    targets = [name for name in before if name.lower().startswith("ground_")]
+    if not targets:
+        print("no ground_* object in Ansys")
+    else:
+        q3d.modeler._modeler.Delete(
+            ["NAME:Selections", "Selections:=", ",".join(targets)]
+        )
+        print("deleted", targets)
+    after = _ansys_object_names(q3d)
+    leftover = [name for name in after if name.lower().startswith("ground_")]
+    if leftover:
+        raise RuntimeError(
+            "ground sheet still in Ansys after delete: "
+            f"{leftover}. Unassigned conductors are treated as grounded."
+        )
+    print("ansys objects after ground delete:", after)
     try:
         q3d.assign_nets()
     except Exception as exc:
