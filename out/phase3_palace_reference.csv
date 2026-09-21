@@ -1,0 +1,6 @@
+run,geometry,mesh,status,CJ_P1P2_fF,CJ_P3P2_fF,CR_P1P3_fF,file,notes
+pads_1um_stubs,"L6+L7 Ta pads+IDC plus 1 um Al pad stubs; no meander; no L2D2400","IDC min 5 um, pads 20 um, no Al-box field",ok,27.85,27.64,572.63,out/phase2_C_fF_coarse.csv,"First successful Palace C. Terminals Cond1=P3 Cond2=P1 Cond3=P2. Ground = air-box walls."
+al_meander,"Same pads+IDC plus all L2D2100 Al (meander cut 1.2 um at y=0); no L2D2400; no L3","IDC min 5 um, pads 20 um, no Al-box field",ok,32.74,32.54,600.27,out/phase2_C_fF_al_meander.csv,"Current Palace reference for Phase 3. Same terminal map. P1-P2 Al gap 4.15 um."
+idc_2um,"Same as pads_1um_stubs intent; IDC min 2 um",IDC min 2 um,oom,,,,"sims leftover ~1.7 GB msh","Palace rank0 ~13 GB RSS. Do not open that msh. Do not rerun --fine here."
+al_box_2um,"al_meander geometry plus 2 um size field on whole Al bbox",2 um on ~120x160 um box,oom,,,,3 GB msh,"Mesher finished; Palace not run. Do not open."
+jj_box_0p15um,"CAD had L2D2400 0.20 um JJ gaps; 0.15 um size field on 6x16 um origin box",0.15 um JJ box,killed,,,,,"Mesher ~13 GB RSS; no new msh. Geometry kept; not a C run."

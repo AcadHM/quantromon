@@ -1,0 +1,3 @@
+case,palace_CJ_P1P2_fF,palace_CJ_P3P2_fF,palace_CR_P1P3_fF,q3d_CJ_P1P2_fF,q3d_CJ_P3P2_fF,q3d_CR_P1P3_fF,note
+pads,27.847876600299998,27.635142594039998,572.6308702714,,,,"Palace file is pads+1um stubs, not Ta-only. Closest frozen C."
+al_meander,32.738186430969996,32.53888865462,600.2711481782,,,,Main comparison. L2D2100 cut at y=0. No L2D2400.
