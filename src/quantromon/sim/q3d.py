@@ -104,6 +104,22 @@ def interpret_named(C_fF: np.ndarray) -> dict:
     return interpret_maxwell_fF(C_fF, {1: "P1", 2: "P2", 3: "P3"})
 
 
+def _allow_pandas_delim_whitespace() -> None:
+    """pyEPR still passes delim_whitespace; pandas 2.2+ removed that kwarg."""
+    if getattr(pd.read_csv, "_quantromon_delim_patch", False):
+        return
+    orig = pd.read_csv
+
+    def read_csv(*args, **kwargs):
+        if kwargs.pop("delim_whitespace", False):
+            kwargs["sep"] = r"\s+"
+            kwargs.setdefault("engine", "python")
+        return orig(*args, **kwargs)
+
+    read_csv._quantromon_delim_patch = True
+    pd.read_csv = read_csv
+
+
 def _delete_ground_if_present(q3d) -> None:
     """Metal always draws ground_main_plane. Palace has no on-chip ground."""
     for name in ("ground_main_plane", "ground_main_plane1"):
@@ -148,6 +164,7 @@ def run_q3d_case(case_name: str, max_passes: int = 10, percent_error: float = 0.
     lom.sim.setup.freq_ghz = 5.0
     setup_name = q3d.initialize_cap_extract(**lom.sim.setup)
     q3d.analyze_setup(setup_name)
+    _allow_pandas_delim_whitespace()
     df, units = q3d.get_capacitance_matrix()
     print("Q3D raw matrix\n", df)
     print("units", units)
